@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste de Prontidão Emocional</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #F5EDE0;
+    --card:      #EBE0CE;
+    --surface:   #E2D5BE;
+    --gold:      #9C7A3C;
+    --gold-l:    #B8934A;
+    --gold-d:    #7A5E2C;
+    --terra:     #A04A1E;
+    --terra-l:   #C05A28;
+    --text:      #1A0F00;
+    --text-2:    #3A200A;
+    --text-m:    #8A6A4A;
+    --border:    rgba(156,122,60,0.18);
+    --border-h:  rgba(156,122,60,0.48);
+    --r:         20px;
+    --rs:        12px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background:
+      radial-gradient(ellipse 70% 50% at 10% 5%,  rgba(156,122,60,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 95%, rgba(160,74,30,0.06)  0%, transparent 60%);
+    pointer-events:none; z-index:0;
+  }
+
+  .wrap {
+    position:relative; z-index:1;
+    max-width:720px; margin:0 auto;
+    padding:44px 24px 80px;
+  }
+
+  /* SCREENS */
+  .screen { display:none; animation: fadeUp .55s ease forwards; }
+  .screen.active { display:block; }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* ORNAMENT */
+  .orn { display:flex; align-items:center; gap:14px; margin-bottom:40px; }
+  .orn-l { flex:1; height:1px; background:linear-gradient(to right, transparent, var(--gold-d)); }
+  .orn-l.r { background:linear-gradient(to left, transparent, var(--gold-d)); }
+  .orn-d { width:7px; height:7px; background:var(--gold); transform:rotate(45deg); flex-shrink:0; }
+  .orn-d.s { width:4px; height:4px; background:var(--terra); opacity:.6; }
+
+  /* EYEBROW */
+  .eyebrow {
+    font-size:11px; font-weight:500; letter-spacing:3px;
+    text-transform:uppercase; color:var(--gold-d);
+    text-align:center; margin-bottom:22px;
+  }
+
+  /* INTRO TITLE */
+  .intro-title {
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(28px,6vw,44px); font-weight:400;
+    line-height:1.25; text-align:center; color:var(--text);
+    margin-bottom:10px;
+  }
+  .intro-title em { font-style:italic; color:var(--terra); }
+
+  .intro-sub {
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-size:clamp(15px,3vw,19px); font-style:italic;
+    color:var(--gold-d); margin-bottom:44px; letter-spacing:.5px;
+  }
+
+  /* INTRO BODY */
+  .intro-body {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--r); padding:40px; margin-bottom:22px;
+  }
+  .intro-body p { font-size:14px; line-height:1.85; color:var(--text-2); margin-bottom:16px; }
+  .intro-body p:last-child { margin-bottom:0; }
+  .intro-body strong { color:var(--text); font-weight:500; }
+  .intro-body em { color:var(--terra); font-style:italic; }
+
+  /* AVISO */
+  .aviso {
+    background:rgba(156,122,60,.06);
+    border:1px solid rgba(156,122,60,.22);
+    border-left:3px solid var(--gold-d);
+    border-radius:var(--rs);
+    padding:18px 22px; margin-bottom:34px;
+    display:flex; gap:14px; align-items:flex-start;
+  }
+  .aviso-icon { color:var(--gold-d); flex-shrink:0; margin-top:2px; font-size:15px; }
+  .aviso p { font-size:13px; line-height:1.7; color:var(--text-m); }
+  .aviso strong { color:var(--gold-d); font-weight:500; }
+
+  /* BTN PRIMARY */
+  .btn-primary {
+    display:block; width:100%; padding:20px 40px;
+    background:linear-gradient(135deg, var(--gold-d), var(--gold-l), var(--gold-d));
+    background-size:200%;
+    color:#F5EDE0;
+    font-family:'DM Sans', sans-serif; font-size:13px;
+    font-weight:500; letter-spacing:2px; text-transform:uppercase;
+    border:none; border-radius:100px; cursor:pointer;
+    transition:all .35s ease; text-align:center;
+  }
+  .btn-primary:hover {
+    background-position:right;
+    transform:translateY(-2px);
+    box-shadow:0 10px 36px rgba(156,122,60,.28);
+  }
+
+  /* PROGRESS */
+  .prog-wrap { margin-bottom:36px; }
+  .prog-info { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .prog-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--text-m); }
+  .prog-num { font-family:'Cormorant Garamond', serif; font-size:18px; color:var(--gold); }
+  .prog-bg { height:3px; background:rgba(0,0,0,.1); border-radius:100px; overflow:hidden; }
+  .prog-fill { height:100%; border-radius:100px; background:linear-gradient(to right, var(--gold-d), var(--gold-l)); transition:width .5s cubic-bezier(.4,0,.2,1); }
+
+  /* QUESTION CARD */
+  .q-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--r); padding:40px; margin-bottom:18px;
+  }
+  .q-num { font-family:'Cormorant Garamond',serif; font-size:13px; font-style:italic; color:var(--gold-d); margin-bottom:14px; letter-spacing:1px; }
+  .q-text { font-family:'Cormorant Garamond',serif; font-size:clamp(20px,3.5vw,26px); font-weight:400; line-height:1.45; color:var(--text); }
+
+  /* OPTIONS */
+  .opts { display:flex; flex-direction:column; gap:12px; }
+
+  .opt {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--rs); padding:18px 22px;
+    cursor:pointer; text-align:left;
+    transition:all .25s ease;
+    display:flex; align-items:flex-start; gap:14px;
+  }
+  .opt:hover { border-color:var(--border-h); transform:translateX(3px); background:var(--card); }
+  .opt.sel { border-color:var(--gold); background:rgba(156,122,60,.08); }
+
+  .opt-letter {
+    width:28px; height:28px; border-radius:50%;
+    border:1px solid var(--gold-d);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond',serif; font-size:13px;
+    color:var(--gold); flex-shrink:0; transition:all .25s;
+  }
+  .opt.sel .opt-letter { background:var(--gold); color:#F5EDE0; border-color:var(--gold); }
+
+  .opt-txt { font-size:14px; line-height:1.65; color:var(--text-2); transition:color .25s; padding-top:4px; }
+  .opt.sel .opt-txt, .opt:hover .opt-txt { color:var(--text); }
+
+  /* NAV */
+  .nav { display:flex; justify-content:flex-end; gap:10px; margin-top:18px; }
+
+  .btn-next {
+    padding:15px 38px;
+    background:linear-gradient(135deg, var(--gold-d), var(--gold-l));
+    color:#F5EDE0;
+    font-family:'DM Sans',sans-serif; font-size:13px;
+    font-weight:500; letter-spacing:1.5px; text-transform:uppercase;
+    border:none; border-radius:100px; cursor:pointer;
+    transition:all .3s; opacity:.28; pointer-events:none;
+  }
+  .btn-next.on { opacity:1; pointer-events:all; }
+  .btn-next.on:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(156,122,60,.3); }
+
+  .btn-back {
+    padding:15px 22px; background:transparent;
+    color:var(--text-m); font-family:'DM Sans',sans-serif;
+    font-size:13px; border:1px solid rgba(0,0,0,.14);
+    border-radius:100px; cursor:pointer; transition:all .25s;
+  }
+  .btn-back:hover { border-color:rgba(0,0,0,.28); color:var(--text-2); }
+
+  /* RESULT HEADER */
+  .res-header { text-align:center; margin-bottom:44px; }
+  .res-eyebrow { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--gold-d); margin-bottom:18px; }
+
+  .res-name {
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(44px,10vw,68px);
+    font-weight:300; line-height:1.15;
+    color:var(--text); margin-bottom:8px;
+  }
+  .res-name em { font-style:italic; color:var(--terra); }
+
+  .res-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(156,122,60,.1);
+    border:1px solid rgba(156,122,60,.26);
+    border-radius:100px; padding:8px 20px; margin-top:18px;
+  }
+  .res-badge span { font-size:12px; letter-spacing:1px; color:var(--gold-d); }
+  .badge-dot { width:5px; height:5px; background:var(--gold); border-radius:50%; }
+
+  /* SCORE */
+  .score-vis {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--r); padding:28px 32px;
+    margin-bottom:22px; display:flex; align-items:center; gap:24px;
+  }
+  .score-num { font-family:'Cormorant Garamond',serif; font-size:54px; font-weight:300; color:var(--gold); line-height:1; }
+  .score-max { font-size:13px; color:var(--text-m); margin-top:4px; }
+  .score-bar-w { flex:1; }
+  .score-bar-bg { height:5px; background:rgba(0,0,0,.1); border-radius:100px; overflow:hidden; margin-bottom:10px; }
+  .score-bar { height:100%; border-radius:100px; background:linear-gradient(to right, var(--terra-l), var(--gold-l)); transition:width 1.2s cubic-bezier(.4,0,.2,1); }
+  .score-zones { display:flex; justify-content:space-between; }
+  .score-z { font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--text-m); }
+
+  /* RESULT CARD */
+  .res-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--r); padding:40px; margin-bottom:20px;
+  }
+  .res-sub {
+    font-family:'Cormorant Garamond',serif; font-size:13px;
+    font-style:italic; color:var(--gold-d); letter-spacing:1px;
+    margin-bottom:24px; display:flex; align-items:center; gap:12px;
+  }
+  .res-sub::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .res-txt p { font-size:14px; line-height:1.9; color:var(--text-2); margin-bottom:16px; }
+  .res-txt p:last-child { margin-bottom:0; }
+  .res-txt em { color:var(--terra); font-style:italic; }
+  .res-txt strong { color:var(--text); font-weight:500; }
+
+  /* BULLETS */
+  .bull-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--r); padding:40px; margin-bottom:28px;
+  }
+  .bull-title {
+    font-family:'Cormorant Garamond',serif; font-size:16px;
+    font-weight:500; color:var(--gold-d); margin-bottom:24px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .bull-title::before { content:''; display:block; width:18px; height:1px; background:var(--gold-d); }
+
+  .bull-item {
+    display:flex; align-items:flex-start; gap:14px;
+    padding-bottom:14px; margin-bottom:14px;
+    border-bottom:1px solid rgba(0,0,0,.07);
+  }
+  .bull-item:last-child { margin-bottom:0; padding-bottom:0; border-bottom:none; }
+  .bull-dot { width:5px; height:5px; background:var(--terra); border-radius:50%; flex-shrink:0; margin-top:8px; }
+  .bull-item p { font-size:14px; line-height:1.7; color:var(--text-2); }
+
+  /* RESTART */
+  .btn-restart {
+    display:block; width:100%; padding:17px;
+    background:transparent; color:var(--text-m);
+    font-family:'DM Sans',sans-serif; font-size:12px;
+    letter-spacing:2px; text-transform:uppercase;
+    border:1px solid rgba(0,0,0,.13); border-radius:100px;
+    cursor:pointer; transition:all .3s; text-align:center;
+  }
+  .btn-restart:hover { border-color:var(--border-h); color:var(--text-2); }
+
+  @media (max-width:600px) {
+    .intro-body,.q-card,.res-card,.bull-card { padding:26px 20px; }
+    .score-vis { flex-direction:column; align-items:flex-start; gap:16px; }
+    .score-bar-w { width:100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- INTRO -->
+  <div class="screen active" id="s-intro">
+    <div class="orn">
+      <div class="orn-l"></div>
+      <div class="orn-d s"></div>
+      <div class="orn-d"></div>
+      <div class="orn-d s"></div>
+      <div class="orn-l r"></div>
+    </div>
+    <p class="eyebrow">Teste de Prontidão Emocional</p>
+    <h1 class="intro-title">Você Realmente Está Pronta<br>para se <em>Transformar</em> —<br>ou Ainda Está só Querendo Mudar?</h1>
+    <p class="intro-sub">Uma reflexão honesta sobre onde você está agora</p>
+    <div class="intro-body">
+      <p>Existe uma diferença enorme entre <strong>querer</strong> mudar e estar <strong>pronta</strong> para mudar.</p>
+      <p>Querer é fácil. É o desejo que surge quando a dor aperta, quando o cansaço bate, quando a vida parece não caber mais no espaço que você criou para ela. Querer mudar é humano, natural, e quase todo mundo já sentiu isso em algum momento.</p>
+      <p>Mas estar pronta — <em>verdadeiramente pronta</em> — é outra coisa.</p>
+      <p>Estar pronta é ter a coragem de olhar para dentro sem desviar o olhar quando o que você vê te desconforta. É aceitar que o processo de transformação não é linear, não é indolor, e que ele vai exigir de você muito mais do que comparecer às sessões.</p>
+      <p>A terapia profunda de transformação pessoal não é um lugar onde você vai para ser <em>consertada</em>. É um espaço onde você vai ser convidada a se ver com uma honestidade que talvez nunca tenha permitido antes. E para que esse processo funcione de verdade, é preciso que você chegue nele com uma certa disposição interior — não perfeita, não sem medos, mas com abertura.</p>
+      <p>Este teste foi criado para te ajudar a entender onde você está agora. Não para te julgar. Não para te dizer se você é capaz ou não. Mas para <strong>acender uma luz sobre o seu estado emocional atual</strong> — porque o ponto de partida importa tanto quanto o destino.</p>
+      <p><em>Responda com honestidade. Não com quem você gostaria de ser. Com quem você é hoje.</em></p>
+    </div>
+    <div class="aviso">
+      <span class="aviso-icon">◈</span>
+      <p><strong>Aviso importante:</strong> Este teste é uma ferramenta de rastreio inicial e não substitui avaliação ou atendimento psicológico.</p>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()">Iniciar o teste</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="s-quiz">
+    <div class="prog-wrap">
+      <div class="prog-info">
+        <span class="prog-label">Sua jornada</span>
+        <span class="prog-num" id="prog-num">1 / 10</span>
+      </div>
+      <div class="prog-bg"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <div class="q-card">
+      <p class="q-num" id="q-num">Pergunta 01</p>
+      <p class="q-text" id="q-text"></p>
+    </div>
+    <div class="opts" id="opts"></div>
+    <div class="nav">
+      <button class="btn-back" id="btn-back" onclick="prev()" style="display:none">← Voltar</button>
+      <button class="btn-next" id="btn-next" onclick="next()">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="s-result">
+    <div class="orn">
+      <div class="orn-l"></div>
+      <div class="orn-d s"></div>
+      <div class="orn-d"></div>
+      <div class="orn-d s"></div>
+      <div class="orn-l r"></div>
+    </div>
+    <div class="res-header">
+      <p class="res-eyebrow">Seu resultado</p>
+      <h2 class="res-name" id="res-name"></h2>
+      <div class="res-badge"><div class="badge-dot"></div><span id="res-badge"></span></div>
+    </div>
+    <div class="score-vis">
+      <div>
+        <div class="score-num" id="score-num"></div>
+        <div class="score-max">de 30 pontos</div>
+      </div>
+      <div class="score-bar-w">
+        <div class="score-bar-bg"><div class="score-bar" id="score-bar" style="width:0%"></div></div>
+        <div class="score-zones">
+          <span class="score-z">Preparação</span>
+          <span class="score-z">Despertar</span>
+          <span class="score-z">Abertura</span>
+        </div>
+      </div>
+    </div>
+    <div class="res-card">
+      <p class="res-sub" id="res-sub"></p>
+      <div class="res-txt" id="res-txt"></div>
+    </div>
+    <div class="bull-card">
+      <p class="bull-title">O que isso revela em padrões e comportamentos</p>
+      <div id="res-bulls"></div>
+    </div>
+    <button class="btn-restart" onclick="startQuiz()">Refazer o teste</button>
+  </div>
+
+</div>
+<script>
+const Qs=[
+  {t:"Quando algo de ruim acontece na sua vida, qual é o seu movimento mais natural?",o:[{l:"A",tx:"Fico remoendo o que o outro fez ou deixou de fazer. No fundo, sei que a culpa raramente é minha.",p:1},{l:"B",tx:"Tento entender o que aconteceu, mas ainda sinto muita dificuldade em me ver como parte do problema.",p:2},{l:"C",tx:"Mesmo que doa, consigo perguntar: o que eu contribuí para isso?",p:3}]},
+  {t:"Como você se sente diante da ideia de mudar padrões profundos de comportamento — mesmo aqueles que, no fundo, você sabe que te prejudicam?",o:[{l:"A",tx:"É difícil até pensar nisso. Esses padrões são parte de quem eu sou.",p:1},{l:"B",tx:"Quero mudar, mas quando chega a hora, algo sempre me segura.",p:2},{l:"C",tx:"Já percebi que certos comportamentos me limitam e estou disposta a enfrentá-los, mesmo sem saber exatamente como.",p:3}]},
+  {t:"Quando você pensa em fazer terapia (ou em aprofundar o processo que já começou), o que predomina dentro de você?",o:[{l:"A",tx:"A esperança de que alguém finalmente me ajude a resolver o que não consigo sozinha.",p:1},{l:"B",tx:"Uma mistura de esperança e medo — não sei bem o que vou encontrar.",p:2},{l:"C",tx:"A consciência de que é um processo meu, e que o terapeuta é um guia, não um salvador.",p:3}]},
+  {t:"Você consegue identificar, com alguma clareza, emoções que sente no seu corpo — como tensão, vazio, angústia — antes mesmo de conseguir nomeá-las com palavras?",o:[{l:"A",tx:"Raramente. Geralmente só percebo o que sinto quando já está grande demais.",p:1},{l:"B",tx:"Às vezes, mas ainda confundo muito emoções diferentes entre si.",p:2},{l:"C",tx:"Sim, tenho uma certa familiaridade com o que acontece dentro de mim, mesmo que nem sempre saiba explicar.",p:3}]},
+  {t:"Imagine que, no meio de um processo terapêutico, você percebe que precisa abandonar uma crença que carregou a vida inteira — algo em que você sempre acreditou sobre si mesma. Como isso ressoa em você?",o:[{l:"A",tx:"Seria muito ameaçador. Não sei se conseguiria abrir mão disso.",p:1},{l:"B",tx:"Seria difícil, mas imagino que seria parte do processo.",p:2},{l:"C",tx:"Já espero por isso. Sei que transformação real exige que eu reveja até o que parece certo.",p:3}]},
+  {t:"Nos últimos tempos, você tem buscado entender por que reage da forma que reage — ou tem se concentrado mais em controlar as reações para que os outros não percebam?",o:[{l:"A",tx:"Controlar é o que consigo fazer. Entender parece complicado demais.",p:1},{l:"B",tx:"Às vezes me pergunto o porquê, mas ainda me pego mais no controle do que na compreensão.",p:2},{l:"C",tx:"Tenho tentado ir além da reação — quero entender a raiz, mesmo que seja desconfortável.",p:3}]},
+  {t:"Você está disposta a continuar no processo mesmo quando ele parecer não estar funcionando, quando você se sentir estagnada ou quando a terapia mexer com coisas que você preferia não tocar?",o:[{l:"A",tx:"Honestamente, se não vir resultado rápido, provavelmente desistiria.",p:1},{l:"B",tx:"Tentaria continuar, mas o desconforto intenso poderia me fazer questionar se vale a pena.",p:2},{l:"C",tx:"Sim. Já entendi que os momentos de resistência são exatamente onde o processo precisa de mais presença.",p:3}]},
+  {t:"Como você lida com a ideia de ser vulnerável diante de alguém — de mostrar suas fragilidades sem construir uma narrativa que te proteja?",o:[{l:"A",tx:"É muito difícil. Costumo apresentar uma versão mais organizada de mim, mesmo quando estou destruída por dentro.",p:1},{l:"B",tx:"Com algumas pessoas consigo, mas é um esforço enorme e nem sempre me sinto segura o suficiente.",p:2},{l:"C",tx:"Tenho aprendido que a vulnerabilidade real é o único caminho — e estou mais disposta a ela do que antes.",p:3}]},
+  {t:"Quando você pensa nos relacionamentos e situações que te causam mais sofrimento, qual é a sua leitura mais honesta?",o:[{l:"A",tx:"São situações que me acontecem. Não vejo muito o que eu poderia fazer diferente.",p:1},{l:"B",tx:"Percebo que tenho algum papel, mas ainda é difícil assumir isso sem me sentir mal comigo mesma.",p:2},{l:"C",tx:"Consigo enxergar padrões que se repetem e reconheço que sou parte ativa dessas dinâmicas.",p:3}]},
+  {t:"O que você espera que a terapia produza em você?",o:[{l:"A",tx:"Que eu me sinta melhor, mais leve, e que os problemas ao meu redor se resolvam.",p:1},{l:"B",tx:"Que eu entenda melhor o que sinto e consiga lidar com as situações de uma forma menos sofrida.",p:2},{l:"C",tx:"Que eu me transforme genuinamente — não apenas como me sinto, mas quem eu sou e como me relaciono com a vida.",p:3}]}
+];
+
+const Rs=[
+  {range:[10,17],name:"A Semente<br><em>Ainda Fechada</em>",badge:"Fase de Preparação · Baixa Prontidão",sub:"O que isso revela sobre você agora",txt:`<p>Existe algo muito importante acontecendo dentro de você — e o simples fato de você ter chegado até aqui, de ter se disposto a responder essas perguntas, já diz muito. Não é pouca coisa. <strong>É o início de um olhar.</strong></p><p>Mas o que as suas respostas revelam é que, neste momento, uma parte significativa de você ainda está voltada para fora — para o que os outros fizeram, para o que as circunstâncias impuseram, para o que a vida não te deu. E isso é humano. É protetor. É uma forma que a psique encontrou de sobreviver.</p><p>O desafio é que a terapia profunda não consegue avançar enquanto esse movimento estiver muito ativo. Não porque você seja difícil ou incapaz — mas porque o processo de transformação exige que você esteja disposta a se tornar o centro da sua própria narrativa. <em>Não como culpada. Como protagonista.</em></p><p>Você pode estar chegando à terapia com uma expectativa de ser compreendida, de finalmente encontrar alguém que valide a sua dor — e isso faz todo o sentido. Você merece isso. Só que a terapia também vai te convidar a ir além da validação, em direção à responsabilização amorosa. E esse passo pode encontrar muita resistência.</p><p>Isso não significa que você não deveria buscar ajuda. Significa que talvez o trabalho mais urgente agora seja <strong>criar condições internas</strong> para que o processo realmente entre. Às vezes, as primeiras sessões existem exatamente para isso: preparar o terreno antes de plantar.</p><p><em>Você está no início de algo. E começos também são sagrados.</em></p>`,bulls:["Tende a interpretar os problemas como algo que vem de fora — das pessoas, das situações, das circunstâncias","Tem dificuldade em perceber seus próprios padrões sem se sentir atacada ou culpada","A ideia de mudança desperta mais ansiedade do que curiosidade","Pode buscar na terapia uma validação emocional, mais do que uma transformação genuína","A vulnerabilidade real ainda representa uma ameaça, e não um caminho","Tende a medir resultados de forma rápida e desistir quando não os sente","Existe uma parte sua que quer mudar — mas outra que ainda não se sente segura o suficiente para isso"]},
+  {range:[18,24],name:"O Despertar<br><em>em Movimento</em>",badge:"Transição Ativa · Prontidão Moderada",sub:"O que isso revela sobre você agora",txt:`<p>Você está num lugar muito interessante — e ao mesmo tempo, muito desafiador. Você já acordou o suficiente para saber que algo precisa mudar. Já sente que certos padrões te limitam. Já tem momentos de consciência genuína sobre si mesma. Mas ainda convive com uma <strong>tensão interna</strong> entre a pessoa que você está se tornando e a que você foi por tanto tempo.</p><p><em>Isso é o despertar. E ele é incômodo por natureza.</em></p><p>O que suas respostas mostram é que você está no meio de um processo — não no início, não no fim. Você já sabe demais para voltar atrás, mas ainda não tem clareza suficiente para avançar com confiança. Esse é exatamente o momento em que a terapia pode ser mais poderosa, e ao mesmo tempo mais exigente.</p><p>Você vai encontrar resistência no caminho. Vai ter sessões em que vai querer parar, momentos em que vai questionar se está progredindo, fases em que a transformação vai parecer distante. E vai ser nesses momentos que a <strong>sua escolha de continuar vai definir tudo.</strong></p><p>A sua maior força agora é que você já tem alguma consciência emocional. Já consegue, pelo menos parcialmente, se ver com honestidade. E isso é um recurso imenso. O trabalho agora é aprofundar essa consciência, reduzir a distância entre o que você percebe e o que você de fato faz com isso.</p><p><em>Você está pronta para começar — ou continuar. O que você faz com o que descobre em sessão é o que vai determinar o tamanho da sua transformação.</em></p>`,bulls:["Alterna entre momentos de consciência genuína e recaídas nos velhos padrões — e isso é completamente esperado","Já percebe seus comportamentos, mas ainda tem dificuldade em mudá-los de forma consistente","A relação com a mudança é ambivalente: ao mesmo tempo desejada e temida","Tem alguma capacidade de se ver como parte dos seus problemas, mas a autorresponsabilidade ainda encontra resistência emocional","A vulnerabilidade é possível em ambientes seguros, mas ainda exige esforço consciente","Pode subestimar o progresso porque ainda compara quem é com quem quer ser","Tem potencial real para uma transformação profunda — o que falta é persistência através do desconforto"]},
+  {range:[25,30],name:"A Porta Aberta<br><em>Por Dentro</em>",badge:"Alta Prontidão · Abertura Real",sub:"O que isso revela sobre você agora",txt:`<p>Há algo de raro no seu estado interno agora. Não é que você não tenha medos — você provavelmente tem muitos. Não é que você não sinta resistência — ela vai aparecer. Mas o que as suas respostas revelam é que você está num nível de <strong>maturidade emocional</strong> que pouquíssimas pessoas alcançam sem um longo caminho de autoconhecimento.</p><p>Você já entendeu — talvez não completamente, mas o suficiente — que a transformação começa em você. Que a terapia não é um serviço prestado a você, mas um processo que você atravessa com suporte. Que a dor tem algo a ensinar. Que os padrões que te limitam não são defeitos de caráter, mas estratégias que um dia fizeram sentido e que agora podem ser revistos.</p><p><em>Isso é extraordinário.</em></p><p>Estar com a porta aberta por dentro não significa que a jornada será fácil. Significa que você está disposta a caminhar mesmo quando for difícil. Que vai conseguir usar o desconforto como informação, e não como sinal de que algo está errado. Que vai manter o processo mesmo quando ele parecer silencioso.</p><p>O que você precisa agora é de um espaço terapêutico que <strong>honre o nível de comprometimento</strong> que você está disposta a trazer. Um processo que não subestime a sua capacidade de aprofundamento — porque você está pronta para ir longe.</p><p>Cuide apenas para não transformar a busca pela transformação em mais uma forma de exigência sobre si mesma. <em>O processo mais poderoso é aquele que acontece com presença — não com pressão.</em></p><p>Você está pronta. Agora é sobre encontrar o caminho certo para caminhar.</p>`,bulls:["Tem alta capacidade de autorresponsabilidade sem autoflagelação","Consegue identificar seus padrões emocionais com relativa clareza e está disposta a revisá-los","Enxerga a mudança como algo necessário e possível — não como uma ameaça à sua identidade","Tem tolerância ao desconforto do processo e consegue distinguir resistência produtiva de sinal de parada","A vulnerabilidade não é mais um inimigo — você já entende que ela é parte do acesso à transformação","Busca na terapia uma parceria de crescimento, não uma solução externa para problemas internos","Está emocionalmente disponível para o nível de profundidade que um processo de transformação real exige"]}
+];
+
+let cur=0, ans=new Array(10).fill(null);
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  el.classList.add('active');
+  el.style.animation='none';
+  requestAnimationFrame(()=>{el.style.animation='';});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startQuiz(){cur=0;ans=new Array(10).fill(null);render();show('s-quiz');}
+
+function render(){
+  const q=Qs[cur];
+  document.getElementById('q-num').textContent='Pergunta '+String(cur+1).padStart(2,'0');
+  document.getElementById('q-text').textContent=q.t;
+  document.getElementById('prog-num').textContent=(cur+1)+' / 10';
+  document.getElementById('prog-fill').style.width=(cur/10*100)+'%';
+  const el=document.getElementById('opts');
+  el.innerHTML='';
+  q.o.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt'+(ans[cur]===i?' sel':'');
+    b.innerHTML=`<span class="opt-letter">${o.l}</span><span class="opt-txt">${o.tx}</span>`;
+    b.onclick=()=>pick(i);
+    el.appendChild(b);
+  });
+  document.getElementById('btn-next').className='btn-next'+(ans[cur]!==null?' on':'');
+  document.getElementById('btn-back').style.display=cur>0?'block':'none';
+  document.getElementById('btn-next').textContent=cur===9?'Ver meu resultado →':'Continuar →';
+}
+
+function pick(i){
+  ans[cur]=i;
+  document.querySelectorAll('.opt').forEach((b,j)=>b.classList.toggle('sel',j===i));
+  document.getElementById('btn-next').classList.add('on');
+}
+
+function next(){if(ans[cur]===null)return;cur<9?(cur++,render()):showResult();}
+function prev(){if(cur>0){cur--;render();}}
+
+function showResult(){
+  const total=ans.reduce((s,a,i)=>a==null?s:s+Qs[i].o[a].p,0);
+  const r=Rs.find(x=>total>=x.range[0]&&total<=x.range[1])||Rs[2];
+  document.getElementById('res-name').innerHTML=r.name;
+  document.getElementById('res-badge').textContent=r.badge;
+  document.getElementById('score-num').textContent=total;
+  document.getElementById('res-sub').textContent=r.sub;
+  document.getElementById('res-txt').innerHTML=r.txt;
+  document.getElementById('res-bulls').innerHTML=r.bulls.map(b=>`<div class="bull-item"><div class="bull-dot"></div><p>${b}</p></div>`).join('');
+  show('s-result');
+  setTimeout(()=>{document.getElementById('score-bar').style.width=Math.max(5,((total-10)/20)*100)+'%';},300);
+}
+</script>
+</body>
+</html>
